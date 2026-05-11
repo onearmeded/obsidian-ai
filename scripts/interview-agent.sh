@@ -132,4 +132,4 @@ Write the result to the project page file in the vault:
 
 After writing the file, print a brief summary of what was added or changed."
 
-run_prompt "$SYNTH_PROMPT"
+run_prompt "$SYNTH_PROMPT" "Interview: $PROJECT"

@@ -21,4 +21,4 @@ $MEETINGS"
 
 log "Running weekly review..."
 PROMPT=$(build_prompt "weekly-review.md" "$CONTEXT")
-run_prompt "$PROMPT"
+run_prompt "$PROMPT" "Weekly Review"

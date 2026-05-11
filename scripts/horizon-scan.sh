@@ -21,4 +21,4 @@ $MEETINGS"
 
 log "Running horizon scan..."
 PROMPT=$(build_prompt "horizon-scan.md" "$CONTEXT")
-run_prompt "$PROMPT"
+run_prompt "$PROMPT" "Horizon Scan"

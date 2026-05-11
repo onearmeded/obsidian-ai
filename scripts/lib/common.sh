@@ -13,33 +13,31 @@ log() { echo "[gtd] $*" >&2; }
 
 die() { echo "[gtd] ERROR: $*" >&2; exit 1; }
 
-# Run a non-interactive copilot prompt and print the result.
+# Run a non-interactive copilot prompt, render output as HTML, and open in browser.
 # Writes the prompt to a temp file to avoid kernel ARG_MAX limits on large contexts.
-# Usage: run_prompt "prompt text"
-# Respects COPILOT_QUIET (default: true) and COPILOT_EFFORT (default: medium)
+# Usage: run_prompt "prompt text" ["Page Title"]
+# Respects COPILOT_EFFORT (default: medium)
 run_prompt() {
   local prompt="$1"
+  local title="${2:-GTD Output}"
   local effort="${COPILOT_EFFORT:-medium}"
-  local quiet_flag=""
-  if [[ "${COPILOT_QUIET:-true}" == "true" ]]; then
-    quiet_flag="--silent"
-  fi
 
   # Write full prompt to a temp file; pass a short -p that instructs Copilot to read it
   local tmpfile
   tmpfile=$(mktemp "${TMPDIR:-/tmp}/gtd-prompt-XXXXXX.md")
-  # Ensure cleanup on exit of the calling script
   trap "rm -f '$tmpfile'" EXIT
 
   printf '%s' "$prompt" > "$tmpfile"
 
+  log "Opening results in browser..."
   copilot \
     --allow-all-paths \
     --allow-all-tools \
     --reasoning-effort "$effort" \
-    $quiet_flag \
+    --silent \
     -C "$PROJECT_ROOT" \
-    -p "Read the file $tmpfile — it contains your full context and instructions. Execute those instructions."
+    -p "Read the file $tmpfile — it contains your full context and instructions. Execute those instructions." \
+  | bash "$SCRIPTS_DIR/lib/open-in-browser.sh" "$title"
 }
 
 # Build the standard prompt header: system context + optional extra files

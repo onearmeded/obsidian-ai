@@ -12,4 +12,4 @@ source "$(dirname "$0")/lib/common.sh"
 
 log "Running gap finder..."
 PROMPT=$(build_prompt "gap-finder.md")
-run_prompt "$PROMPT"
+run_prompt "$PROMPT" "Gap Finder"

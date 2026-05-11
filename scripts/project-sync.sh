@@ -19,4 +19,4 @@ CONTEXT=$(bash "$SCRIPTS_DIR/lib/gather-project.sh" "$PROJECT")
 
 log "Running project sync..."
 PROMPT=$(build_prompt "project-sync.md" "$CONTEXT")
-run_prompt "$PROMPT"
+run_prompt "$PROMPT" "Project Sync: $PROJECT"

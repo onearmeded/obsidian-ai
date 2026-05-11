@@ -26,4 +26,4 @@ $MEETINGS"
 
 log "Running briefing..."
 PROMPT=$(build_prompt "daily-briefing.md" "$CONTEXT")
-run_prompt "$PROMPT"
+run_prompt "$PROMPT" "Daily Briefing"

@@ -31,10 +31,10 @@ For 'Change to #follow-up': replace #unreviewed with #follow-up in the task line
 For 'Close': replace '- [ ]' with '- [x]' and remove #unreviewed and #task tags.
 Edit each file in place. Report what you changed."
   PROMPT=$(build_prompt "process-inbox.md" "$INBOX")
-  run_prompt "$PROMPT$APPLY_INSTRUCTION"
+  run_prompt "$PROMPT$APPLY_INSTRUCTION" "Inbox Processor"
 else
   log "Running inbox processor in ANALYSIS mode (no changes will be made)..."
   log "Review the output, then re-run with --apply to apply changes."
   PROMPT=$(build_prompt "process-inbox.md" "$INBOX")
-  run_prompt "$PROMPT"
+  run_prompt "$PROMPT" "Inbox Processor"
 fi
