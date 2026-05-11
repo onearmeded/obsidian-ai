@@ -1,0 +1,105 @@
+# Vault Context — GTD Workflow System
+
+You are assisting with a Getting Things Done (GTD)-style workflow backed by an
+Obsidian vault. The vault is at:
+
+    ~/projects/obsidian-ai/obsidian-vault/Work/
+
+## Vault Layout
+
+```
+Work/
+  Key Initiatives.md          # Master index: all products, customers, org areas
+  Action Items.md             # Dashboard (Obsidian Tasks queries — do not edit)
+  Things to Think on or Decide.md  # Open questions and future agenda items
+  Random Notes.md             # Capture/inbox for unstructured notes
+  <Project>.md                # One file per product/customer/org area
+  Meetings/
+    Notes/                    # One file per meeting, named YYYY-MM-DD <Title>.md
+    Transcripts/              # Raw transcripts (skip these unless asked)
+  Email/                      # Email summaries
+```
+
+## Task Format
+
+Tasks use the Obsidian Tasks plugin format:
+
+    - [ ] Task description #tag1 #tag2 📅 YYYY-MM-DD
+
+**Tag meanings:**
+- `#task` — **required base tag**; a task line without `#task` is not a real action item
+  (meeting notes often contain "Owner: X" lines that are not tagged — ignore those)
+- `#mine` — I own this action; only meaningful when `#task` is also present
+- `#follow-up` — assigned to someone else, but I am watching it; only meaningful with `#task`
+- `#unreviewed` — inbox item, not yet classified; only meaningful with `#task`
+
+**Rules for reading tasks:**
+- Only consider a task if it has `#task`. Ignore any task line missing `#task`.
+- `#task #mine` → my next action (I am accountable)
+- `#task #follow-up` → waiting for someone else (I want to stay informed / may need to nudge)
+- `#task #unreviewed` → needs triage
+- Tags may appear in any order on the line.
+
+Completed tasks look like:
+    - [x] Task description #task #mine ✅ YYYY-MM-DD
+
+When collecting open tasks, match lines starting with `- [ ]` that also contain `#task`.
+
+## Meeting Note Format
+
+Each meeting note has YAML frontmatter followed by consistent sections:
+
+```yaml
+---
+date: YYYY-MM-DD
+type: meeting
+source: transcript | notes
+status: summarized | draft
+attendees: Name1, Name2
+---
+```
+
+Sections: Meeting Summary, Key Discussion Points, Decisions Made, Action Items.
+The Action Items section contains tasks in the format above.
+
+## Project Page Format
+
+Project pages follow this structure (explained in detail in `prompts/project-page-format.md`).
+Key points:
+- The `## Next Actions` section contains tasks the Action Items dashboard queries
+- The `## Status` section has a machine-readable **Current:** line
+- Sections are separated by `##` headers; update sections in place, never remove them
+
+## Key Initiatives Index
+
+`Key Initiatives.md` lists all areas under three headings:
+- **Products**: CFR POS, FDMM POS, NV SCO, DSR POS, Back Office, Japan POS, VFS,
+  System Software, Store in a Box
+- **Customers**: Aeon, ADUSA, BP Poland
+- **Organization**: AI Led Development, Solution Tracking, Personnel
+
+Each entry links to a corresponding project page file.
+
+## GTD Roles
+
+| GTD concept     | Where it lives                              |
+|----------------|---------------------------------------------|
+| Inbox           | `#unreviewed` tasks, `Random Notes.md`      |
+| Next Actions    | `#mine` tasks across all files              |
+| Waiting For     | `#follow-up` tasks across all files         |
+| Projects        | Project page files in `Work/`               |
+| Someday/Maybe   | `Things to Think on or Decide.md`           |
+| Reference       | Meeting notes, architecture notes           |
+
+## Writing Back to the Vault
+
+When a workflow produces output that should be saved to the vault:
+- Update project pages by replacing the content of the relevant `##` section
+- Add items to `Things to Think on or Decide.md` as new bullet points
+- Create new meeting notes or review files in `Work/Meetings/Notes/` with the date
+  prefix `YYYY-MM-DD`
+- Never modify `Action Items.md` (it is auto-generated from Tasks queries)
+- Preserve all existing YAML frontmatter; update the `updated:` field when editing
+  a project page
+
+---
