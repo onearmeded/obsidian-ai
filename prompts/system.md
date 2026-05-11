@@ -26,6 +26,8 @@ Tasks use the Obsidian Tasks plugin format:
 
     - [ ] Task description #tag1 #tag2 📅 YYYY-MM-DD
 
+Each task also includes a wikilink to its project, e.g. `[[NV SCO]]`.
+
 **Tag meanings:**
 - `#task` — **required base tag**; a task line without `#task` is not a real action item
   (meeting notes often contain "Owner: X" lines that are not tagged — ignore those)
@@ -44,6 +46,18 @@ Completed tasks look like:
     - [x] Task description #task #mine ✅ YYYY-MM-DD
 
 When collecting open tasks, match lines starting with `- [ ]` that also contain `#task`.
+
+## Capturing New Tasks
+
+New next actions are added from within Obsidian using **QuickAdd**:
+
+- **Quick inbox capture** (`Capture: Next Action (Inbox)`): appends
+  `- [ ] <action> #task #mine #unreviewed` to `Random Notes.md` for later triage.
+- **Project capture** (`Add Next Action to Project`): runs a macro that prompts for
+  a project (picked from the vault file list) and an optional due date, then appends
+  a properly formatted `#task #mine` line to that project's `## Next Actions` section.
+
+The macro script lives at `obsidian-vault/scripts/add-next-action.js`.
 
 ## Meeting Note Format
 
