@@ -2,7 +2,7 @@
 # lib/gather-tasks.sh — extract open tasks from the vault by tag
 #
 # Usage: gather-tasks.sh [tag]
-#   tag: mine | follow-up | unreviewed | all  (default: all)
+#   tag: mine | follow-up | unreviewed | parked | all  (default: all)
 #
 # Only tasks tagged with BOTH #task AND the secondary tag are included.
 # Task lines without #task (e.g. AI-generated "Owner:" lines) are ignored.
@@ -58,12 +58,14 @@ case "$TAG" in
   mine)       print_tasks_for_tag "mine"       "My Next Actions (#task #mine)" ;;
   follow-up)  print_tasks_for_tag "follow-up"  "Waiting For (#task #follow-up)" ;;
   unreviewed) print_tasks_for_tag "unreviewed" "Inbox — Needs Review (#task #unreviewed)" ;;
+  parked)     print_tasks_for_tag "parked"     "Someday/Maybe (#task #parked)" ;;
   all)
     print_tasks_for_tag "mine"       "My Next Actions (#task #mine)"
     print_tasks_for_tag "follow-up"  "Waiting For (#task #follow-up)"
     print_tasks_for_tag "unreviewed" "Inbox — Needs Review (#task #unreviewed)"
+    print_tasks_for_tag "parked"     "Someday/Maybe (#task #parked)"
     ;;
   *)
-    die "Unknown tag '$TAG'. Use: mine | follow-up | unreviewed | all"
+    die "Unknown tag '$TAG'. Use: mine | follow-up | unreviewed | parked | all"
     ;;
 esac

@@ -34,18 +34,20 @@ Each task also includes a wikilink to its project, e.g. `[[NV SCO]]`.
 - `#mine` — I own this action; only meaningful when `#task` is also present
 - `#follow-up` — assigned to someone else, but I am watching it; only meaningful with `#task`
 - `#unreviewed` — inbox item, not yet classified; only meaningful with `#task`
+- `#parked` — Someday/Maybe; intentionally deferred with no current commitment; revisit during weekly review
 
 **Rules for reading tasks:**
 - Only consider a task if it has `#task`. Ignore any task line missing `#task`.
 - `#task #mine` → my next action (I am accountable)
 - `#task #follow-up` → waiting for someone else (I want to stay informed / may need to nudge)
 - `#task #unreviewed` → needs triage
+- `#task #parked` → Someday/Maybe; deferred, no current commitment; surface during weekly review
 - Tags may appear in any order on the line.
 
 Completed tasks look like:
     - [x] Task description #task #mine ✅ YYYY-MM-DD
 
-When collecting open tasks, match lines starting with `- [ ]` that also contain `#task`.
+When collecting open tasks, match lines starting with `- [ ]` or `* [ ]` that also contain `#task`.
 
 ## Capturing New Tasks
 
@@ -90,7 +92,9 @@ Key points:
 - **Products**: CFR POS, FDMM POS, NV SCO, DSR POS, Back Office, Japan POS, VFS,
   System Software, Store in a Box
 - **Customers**: Aeon, ADUSA, BP Poland
-- **Organization**: AI Led Development, Solution Tracking, Personnel
+- **Projects**: Projects that are stand alone or in addition to general customer projects
+- **Process**: Process improvement initiatives
+- **Organization**: Projects related to the overall company or retail engineering organization
 
 Each entry links to a corresponding project page file.
 
@@ -102,7 +106,7 @@ Each entry links to a corresponding project page file.
 | Next Actions    | `#mine` tasks across all files              |
 | Waiting For     | `#follow-up` tasks across all files         |
 | Projects        | Project page files in `Work/`               |
-| Someday/Maybe   | `Things to Think on or Decide.md`           |
+| Someday/Maybe   | `#parked` tasks, `Things to Think on or Decide.md` |
 | Reference       | Meeting notes, architecture notes           |
 
 ## Writing Back to the Vault
@@ -115,5 +119,7 @@ When a workflow produces output that should be saved to the vault:
 - Never modify `Action Items.md` (it is auto-generated from Tasks queries)
 - Preserve all existing YAML frontmatter; update the `updated:` field when editing
   a project page
-
+- If a task is added, always append the #unreviewed tag so it can be triaged
+- Do not tasks that already exist to any page. These will be picked up by dashboards fro the Task plugin. Adding them a second time (e.g. to a project page)
+  creates duplicates
 ---

@@ -13,6 +13,29 @@ log() { echo "[gtd] $*" >&2; }
 
 die() { echo "[gtd] ERROR: $*" >&2; exit 1; }
 
+# Run a non-interactive copilot prompt and return output to stdout.
+# Writes the prompt to a temp file to avoid kernel ARG_MAX limits on large contexts.
+# Usage: capture_prompt "prompt text"
+# Respects COPILOT_EFFORT (default: medium)
+capture_prompt() {
+  local prompt="$1"
+  local effort="${COPILOT_EFFORT:-medium}"
+
+  local tmpfile
+  tmpfile=$(mktemp "${TMPDIR:-/tmp}/gtd-prompt-XXXXXX.md")
+  trap "rm -f '$tmpfile'" EXIT
+
+  printf '%s' "$prompt" > "$tmpfile"
+
+  copilot \
+    --allow-all-paths \
+    --allow-all-tools \
+    --reasoning-effort "$effort" \
+    --silent \
+    -C "$PROJECT_ROOT" \
+    -p "Read the file $tmpfile — it contains your full context and instructions. Execute those instructions."
+}
+
 # Run a non-interactive copilot prompt, render output as HTML, and open in browser.
 # Writes the prompt to a temp file to avoid kernel ARG_MAX limits on large contexts.
 # Usage: run_prompt "prompt text" ["Page Title"]

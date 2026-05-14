@@ -18,21 +18,17 @@ PROJECT="${1:-}"
 log "Gathering existing vault content for: $PROJECT"
 CONTEXT=$(bash "$SCRIPTS_DIR/lib/gather-project.sh" "$PROJECT")
 
-SYSTEM=$(cat "$PROMPTS_DIR/system.md")
-INTERVIEW_INSTRUCTIONS=$(cat "$PROMPTS_DIR/interview-agent.md")
+# Write the static context (system prompt + vault content + interview instructions)
+# to a persistent temp file. Each turn prompt references it by path rather than
+# embedding the full text, keeping per-turn prompts small.
+CONTEXT_FILE=$(mktemp "${TMPDIR:-/tmp}/gtd-interview-context-XXXXXX.md")
+trap "rm -f '$CONTEXT_FILE'" EXIT
 
-# Shared preamble injected into every turn
-PREAMBLE="$SYSTEM
-
----
-
-## Existing Vault Content for: $PROJECT
-
-$CONTEXT
-
----
-
-$INTERVIEW_INSTRUCTIONS"
+{
+  cat "$PROMPTS_DIR/system.md"
+  printf '\n\n---\n\n## Existing Vault Content for: %s\n\n%s\n\n---\n\n' "$PROJECT" "$CONTEXT"
+  cat "$PROMPTS_DIR/interview-agent.md"
+} > "$CONTEXT_FILE"
 
 CONVERSATION=""
 TURN=0
@@ -51,31 +47,31 @@ while [[ $TURN -lt $MAX_TURNS ]]; do
   TURN=$((TURN + 1))
 
   if [[ $TURN -eq 1 ]]; then
-    TURN_PROMPT="$PREAMBLE
-
-You are beginning the interview. Briefly summarize what you already know about
-\"$PROJECT\" from the vault content above (2-3 sentences), then ask your first question.
+    TURN_INSTRUCTIONS="You are beginning the interview. Briefly summarize what you already know about
+\"$PROJECT\" from the vault content (2-3 sentences), then ask your first question.
 
 Output format: summary paragraph, blank line, then the question.
 End your output with exactly: [QUESTION $TURN]"
   else
-    TURN_PROMPT="$PREAMBLE
-
-## Interview So Far
-
-$CONVERSATION
-
----
-
-Based on the conversation above, ask the next question. If you have covered all
+    TURN_INSTRUCTIONS="Based on the conversation above, ask the next question. If you have covered all
 topics and have enough to write a solid project page, instead output exactly:
 [READY TO SYNTHESIZE]
 
 Otherwise ask your next question and end with: [QUESTION $TURN]"
   fi
 
-  # Get next question from the agent
-  AGENT_OUTPUT=$(run_prompt "$TURN_PROMPT")
+  TURN_PROMPT="Read the file $CONTEXT_FILE for the full background context and interview instructions.
+
+## Interview So Far
+
+${CONVERSATION:-_(no answers yet)_}
+
+---
+
+$TURN_INSTRUCTIONS"
+
+  # capture_prompt returns text to stdout; run_prompt opens a browser tab
+  AGENT_OUTPUT=$(capture_prompt "$TURN_PROMPT")
 
   # Check if interview is complete
   if echo "$AGENT_OUTPUT" | grep -q "\[READY TO SYNTHESIZE\]"; then
@@ -113,7 +109,7 @@ echo ""
 echo "Synthesizing project page..."
 echo ""
 
-SYNTH_PROMPT="$PREAMBLE
+SYNTH_PROMPT="Read the file $CONTEXT_FILE for the full background context and interview instructions.
 
 ## Completed Interview
 
@@ -129,6 +125,8 @@ Write the result to the project page file in the vault:
   - If the file exists, replace its contents entirely.
   - If not, create it at: obsidian-vault/Work/${PROJECT}.md
   - Set the updated: frontmatter field to today's date.
+  - Any new tasks in the ## Next Actions section must include #unreviewed so they
+    are picked up for triage (e.g. `#task #mine #unreviewed`).
 
 After writing the file, print a brief summary of what was added or changed."
 
