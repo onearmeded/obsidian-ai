@@ -11,7 +11,7 @@ to be thinking about or acting on soon, beyond today's immediate tasks.
    - Unresolved decisions that were flagged but not made
    - Commitments made by others that I'm counting on
    - Threads that were "to be continued" but may have gone quiet
-4. Read `obsidian-vault/Work/Key Initiatives.md` and note any area where nothing
+4. Read `obsidian-vault/Work/Key Initiatives.md` and its links and note any area where nothing
    recent seems to be happening.
 
 ## Output Structure

@@ -18,7 +18,7 @@ List the 3–5 most important next actions I should take today. For each, note:
 - Which project it belongs to
 
 ### ✅ Full Next Actions List
-All open #mine tasks, grouped by project. Flag any that are overdue (past due date).
+All open #mine tasks that are not #parked, grouped by project. Flag any that are overdue (past due date).
 
 ### 👀 Waiting For — Needs a Nudge?
 #follow-up items that have been open a long time or where something may be stuck.

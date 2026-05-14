@@ -30,7 +30,9 @@ the existing vault content. Adapt questions based on what the person tells you.
 - When all topics are covered (or you have enough), say:
   "I think I have enough to write a solid project page. Want me to go ahead?"
 - If the user says yes, synthesize everything into a project page using the format in
-  `prompts/project-page-format.md` and write it to the vault.
+  `prompts/project-page-format.md` (which includes a Task Dashboard section) and write
+  it to the vault. Replace `<Project Name>` in the dashboard queries with the actual
+  project file name.
 
 ## Begin
 

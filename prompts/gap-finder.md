@@ -13,7 +13,7 @@ initiatives that are in the vault but lack attention, clarity, or ownership.
    c. Search meeting notes from the last 30 days for mentions of the item
    d. Check for any open `#mine` or `#follow-up` tasks related to it
 3. Assess each area on these dimensions:
-   - **Page quality**: Does it have a Status, Next Actions, and context? Or is it a stub?
+   - **Page quality**: Does it have a Status, Next Actions, Task Dashboard, and context? Or is it a stub?
    - **Recent activity**: Any meeting notes in the last 30 days?
    - **Open actions**: Any tasks pointing at it?
 

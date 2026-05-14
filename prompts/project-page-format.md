@@ -60,6 +60,35 @@ Background information, links to related resources, anything useful for understa
 the project that does not fit the above sections.
 
 - [[Relevant Meeting Note]] — brief description
+
+## Task Dashboard
+
+### My Actions
+```tasks
+not done
+tags include #mine
+(path includes <Project Name>) OR (description includes [[<Project Name>]])
+```
+
+### Waiting For
+```tasks
+not done
+tags include #follow-up
+(path includes <Project Name>) OR (description includes [[<Project Name>]])
+```
+
+### Inbox
+```tasks
+not done
+tags include #unreviewed
+(path includes <Project Name>) OR (description includes [[<Project Name>]])
+```
+
+### Someday / Maybe
+```tasks
+not done
+tags include #parked
+(path includes <Project Name>) OR (description includes [[<Project Name>]])
 ```
 
 ---
@@ -72,3 +101,4 @@ the project that does not fit the above sections.
 4. **Open Decisions** and **Blockers** are living lists — remove items when resolved.
 5. **Key Decisions Made** is append-only — never remove past decisions.
 6. The one-line description after `>` should remain stable unless fundamentally wrong.
+7. **Task Dashboard** queries must use the exact project name in `path includes` and `[[...]]` — replace `<Project Name>` with the actual file name (without `.md`).
