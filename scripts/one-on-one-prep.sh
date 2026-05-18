@@ -68,10 +68,11 @@ fi
 
 log "Found $COUNT 1-1 note(s) for $NAME"
 
-# --- Also pull open tasks linked to this person from all vault files ---
-TASKS=$(grep -r --include="*.md" -l "$NAME" "$VAULT_DIR" \
-  --exclude-path="*/Transcripts/*" 2>/dev/null \
-  | xargs grep -h "^- \[ \].*#task" 2>/dev/null || true)
+# --- Open tasks that explicitly mention this person (entire vault) ---
+TASKS=$(grep -r --include="*.md" --exclude-dir="Transcripts" -h \
+  "^[*-] \[ \]" "$VAULT_DIR" 2>/dev/null \
+  | grep "#task" \
+  | grep -i "$NAME" || true)
 
 if [[ -n "$TASKS" ]]; then
   CONTEXT="$CONTEXT
@@ -79,6 +80,25 @@ if [[ -n "$TASKS" ]]; then
 ## Open Tasks Mentioning $NAME
 
 $TASKS
+"
+fi
+
+# --- Other vault references: non-task lines mentioning this person ---
+# Include project pages, notes, and email — skip meeting notes (already gathered above)
+# and transcripts. Show the matching line plus its file for context.
+OTHER_REFS=$(grep -r --include="*.md" \
+  --exclude-dir="Transcripts" --exclude-dir="Notes" \
+  -i "$NAME" "$VAULT_DIR" 2>/dev/null \
+  | grep -v "^Binary" \
+  | grep -iv "^[*-] \[.\]" \
+  | sed 's|'"$VAULT_DIR"'/||' || true)
+
+if [[ -n "$OTHER_REFS" ]]; then
+  CONTEXT="$CONTEXT
+---
+## Other Vault References to $NAME
+
+$OTHER_REFS
 "
 fi
 
