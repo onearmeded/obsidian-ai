@@ -13,12 +13,22 @@ Work/
   Action Items.md             # Dashboard (Obsidian Tasks queries — do not edit)
   Things to Think on or Decide.md  # Open questions and future agenda items
   Random Notes.md             # Capture/inbox for unstructured notes
+  Domain Glossary.md          # Canonical spellings and meanings for all domain terms
   <Project>.md                # One file per product/customer/org area
   Meetings/
     Notes/                    # One file per meeting, named YYYY-MM-DD <Title>.md
     Transcripts/              # Raw transcripts (skip these unless asked)
   Email/                      # Email summaries
 ```
+
+## Domain Terminology
+
+A domain glossary is maintained at `Work/Domain Glossary.md`. When reading or writing
+any vault content:
+- Use the exact spellings and abbreviations defined there (e.g. `SCO`, not `self-checkout`)
+- Apply the glossary when interpreting ambiguous terms in transcripts, emails, or notes
+- When generating output (summaries, project pages, briefings), prefer glossary terms
+  over informal or alternative spellings
 
 ## Task Format
 
