@@ -39,17 +39,27 @@ Work through each phase in order. Be thorough but concise in your output.
 ---
 
 ## Output
-Produce a weekly review note in this format and save it to the vault as:
-`obsidian-vault/Work/Meetings/Notes/YYYY-MM-DD Weekly Review.md`
 
-Use this frontmatter:
-```yaml
----
-date: YYYY-MM-DD
-type: weekly-review
-status: complete
----
+Produce the full weekly review covering all five phases above. Include a
+**Top 5 Priorities for the Coming Week** section based on what you've found.
+
+Do **not** write any files — the shell will handle saving the output.
+
+At the very end of your response, append a daily-note summary block using exactly
+this delimiter format (replace the placeholder content with the actual week link
+and 2–3 key themes):
+
+```
+<!-- DAILY_SUMMARY -->
+## Weekly Review
+
+[[WEEK_LINK]] — [one-sentence summary of the week's key themes]
+
+**Heading into next week:**
+- [top priority 1]
+- [top priority 2]
+- [top priority 3]
+<!-- /DAILY_SUMMARY -->
 ```
 
-Include all five phases in the output. At the end, list the **Top 5 Priorities for
-the Coming Week** based on what you've found.
+Where `WEEK_LINK` is the ISO week identifier (e.g. `2026-W20`).

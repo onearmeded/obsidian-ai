@@ -25,5 +25,10 @@ $FOLLOWUPS
 $MEETINGS"
 
 log "Running briefing..."
+TODAY=$(date +%Y-%m-%d)
+FRONTMATTER="---
+date: $TODAY
+tags: [daily-note]
+---"
 PROMPT=$(build_prompt "daily-briefing.md" "$CONTEXT")
-run_prompt "$PROMPT" "Daily Briefing"
+run_prompt_and_save "$PROMPT" "Daily Briefing" "$FRONTMATTER" "Daily Notes/$TODAY.md"

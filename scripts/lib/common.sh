@@ -63,6 +63,51 @@ run_prompt() {
   | bash "$SCRIPTS_DIR/lib/open-in-browser.sh" "$title"
 }
 
+# Save markdown content to the vault. Prepends a frontmatter block and overwrites
+# any existing file. Creates parent directories as needed.
+# Usage: save_to_vault "frontmatter-with-delimiters" "markdown-body" "path/relative/to/VAULT_DIR.md"
+save_to_vault() {
+  local frontmatter="$1"
+  local body="$2"
+  local rel_path="$3"
+  local full_path="$VAULT_DIR/$rel_path"
+  mkdir -p "$(dirname "$full_path")"
+  printf '%s\n\n%s\n' "$frontmatter" "$body" > "$full_path"
+  log "Saved: $rel_path"
+}
+
+# Run a prompt, save output to the vault with frontmatter, and open in browser.
+# The AI produces clean markdown body; the shell owns all file I/O.
+# Usage: run_prompt_and_save "prompt" "title" "frontmatter-with-delimiters" "vault-relative-path"
+# Respects COPILOT_EFFORT (default: medium)
+run_prompt_and_save() {
+  local prompt="$1"
+  local title="${2:-GTD Output}"
+  local frontmatter="$3"
+  local rel_path="$4"
+  local effort="${COPILOT_EFFORT:-medium}"
+
+  local tmpfile
+  tmpfile=$(mktemp "${TMPDIR:-/tmp}/gtd-prompt-XXXXXX.md")
+  trap "rm -f '$tmpfile'" EXIT
+
+  printf '%s' "$prompt" > "$tmpfile"
+
+  log "Running prompt..."
+  local output
+  output=$(copilot \
+    --allow-all-paths \
+    --allow-all-tools \
+    --reasoning-effort "$effort" \
+    --silent \
+    -C "$PROJECT_ROOT" \
+    -p "Read the file $tmpfile — it contains your full context and instructions. Execute those instructions.")
+
+  save_to_vault "$frontmatter" "$output" "$rel_path"
+  log "Opening results in browser..."
+  printf '%s' "$output" | bash "$SCRIPTS_DIR/lib/open-in-browser.sh" "$title"
+}
+
 # Build the standard prompt header: system context + optional extra files
 # Usage: build_prompt "task-prompt-file.md" [extra-context-string]
 build_prompt() {

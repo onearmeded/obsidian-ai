@@ -120,11 +120,38 @@ $CONVERSATION
 The interview is complete. Now produce a full GTD weekly review that incorporates
 both the vault analysis and the interview conversation above.
 
-Read prompts/weekly-review.md from the filesystem for the output format and phases.
+Read prompts/weekly-review.md from the filesystem for the output format and phases."
 
-Save the review note to the vault as:
-  obsidian-vault/Work/Meetings/Notes/$(date +%Y-%m-%d) Weekly Review.md
+SYNTH_OUTPUT=$(capture_prompt "$SYNTH_PROMPT")
 
-After writing the file, print a brief summary of key themes and top priorities."
+# Extract the review body (everything except the DAILY_SUMMARY block)
+REVIEW_BODY=$(printf '%s' "$SYNTH_OUTPUT" \
+  | sed '/<!-- DAILY_SUMMARY -->/,/<!-- \/DAILY_SUMMARY -->/d' \
+  | sed -e 's/[[:space:]]*$//' \
+  | sed -e '/./,$!d' -e 's/[[:space:]]*$//')
 
-run_prompt "$SYNTH_PROMPT" "Weekly Review"
+# Extract the daily note summary (content between delimiters, excluding delimiter lines)
+DAILY_SUMMARY=$(printf '%s' "$SYNTH_OUTPUT" \
+  | sed -n '/<!-- DAILY_SUMMARY -->/,/<!-- \/DAILY_SUMMARY -->/p' \
+  | grep -v '<!--')
+
+WEEK=$(date +%G-W%V)
+TODAY=$(date +%Y-%m-%d)
+
+WEEKLY_FM="---
+date: $TODAY
+week: $WEEK
+tags: [weekly-review]
+---"
+save_to_vault "$WEEKLY_FM" "$REVIEW_BODY" "Periodic Notes/Weekly/$WEEK.md"
+
+if [[ -n "$DAILY_SUMMARY" ]]; then
+  DAILY_FM="---
+date: $TODAY
+tags: [daily-note]
+---"
+  save_to_vault "$DAILY_FM" "$DAILY_SUMMARY" "Daily Notes/$TODAY.md"
+fi
+
+log "Opening results in browser..."
+printf '%s' "$REVIEW_BODY" | bash "$SCRIPTS_DIR/lib/open-in-browser.sh" "Weekly Review"
