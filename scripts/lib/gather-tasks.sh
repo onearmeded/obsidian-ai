@@ -6,6 +6,8 @@
 #
 # Only tasks tagged with BOTH #task AND the secondary tag are included.
 # Task lines without #task (e.g. AI-generated "Owner:" lines) are ignored.
+# Daily Notes/ and Transcripts/ are excluded — daily notes are briefing artifacts
+# and may contain stale - [ ] copies of tasks already completed in source files.
 
 source "$(dirname "$0")/common.sh"
 
@@ -42,7 +44,7 @@ print_tasks_for_tag() {
       echo "${taskline#*:}"
     done <<< "$tasks"
     echo ""
-  done < <(find "$VAULT_DIR" -name "*.md" -not -path "*/Transcripts/*" -print0 | sort -z)
+  done < <(find "$VAULT_DIR" -name "*.md" -not -path "*/Transcripts/*" -not -path "*/Daily Notes/*" -print0 | sort -z)
 
   if [[ $found -eq 0 ]]; then
     echo "_No open tasks found${tag:+ for #task + #${tag}}_"
