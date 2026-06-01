@@ -409,6 +409,7 @@ Be specific. Name people and projects. Flag if something seems stuck or at risk.
    - Propose a reworded version that passes the test (e.g. change "coordinate with legal on contract" → "email Sarah in Legal to schedule contract review call")
    - If you can't determine a concrete next action from context alone, flag the item as **Needs clarification** and ask the user: "What's the very next physical thing you'd do on this?"
    - Never tag a vague or outcome-oriented item as `#mine` without first rewriting it or getting clarification
+   - Items tagged as #follow-up may be vague and do not need to be reworded into concrete, single actions. These are initiatives the user is watching.
 
 6. For **single actions**, recommend one of:
    - **Keep as #mine** (with reworded text if needed) — my action to take; wording must pass the next action test above
