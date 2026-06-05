@@ -1,17 +1,35 @@
-# Scripts Reference
+# GTD AI Assistant
 
-All scripts are run from the **repo root**. Each one sources `lib/common.sh` first,
-which sets up shared paths and helper functions.
+## Primary Interface: `gtd.sh`
+
+Everything is driven through `gtd.sh`, which launches an interactive Copilot session
+with the vault and domain glossary loaded, using the `gtd-assistant` agent:
+
+```bash
+# Open an interactive session
+./gtd.sh
+
+# Start with an initial prompt
+./gtd.sh "Give me a daily briefing"
+./gtd.sh --prompt "Weekly review"
+```
+
+The agent has access to the full vault and can do everything the old scripts did —
+briefings, weekly reviews, project syncs, 1-1 prep, inbox processing, and more — all
+in a conversational interface.
+
+---
+
+## Legacy Scripts (Deprecated)
+
+The scripts below are no longer the recommended way to use this system. They remain
+in `scripts/` for reference but `gtd.sh` supersedes them all.
 
 **Optional environment variable** (applies to all scripts):
 
 | Variable | Default | Effect |
 |---|---|---|
 | `COPILOT_EFFORT` | `medium` | Sets `--reasoning-effort` passed to `copilot`. Use `low` or `high` to trade speed for quality. |
-
-```bash
-COPILOT_EFFORT=high ./scripts/weekly-review.sh
-```
 
 ---
 
